@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
+import { Settings, Save } from "lucide-react";
 
 const DEFAULT_SETTINGS = {
   shopName: "AutoParts Pro",
@@ -30,95 +31,158 @@ export default function SettingsTab() {
   const handleSave = () => {
     localStorage.setItem("shopSettings", JSON.stringify(settings));
     toast({
-      title: "Success",
-      description: "Settings saved successfully",
+      title: "Saved!",
+      description: "Shop settings updated successfully",
+    });
+  };
+
+  const handleReset = () => {
+    setSettings(DEFAULT_SETTINGS);
+    localStorage.removeItem("shopSettings");
+    toast({
+      title: "Reset",
+      description: "Settings reset to defaults",
     });
   };
 
   return (
-    <div className="max-w-2xl">
-      <Card data-testid="card-settings">
-        <CardHeader>
-          <CardTitle>Shop Configuration</CardTitle>
+    <div className="max-w-3xl space-y-6">
+      <Card className="border-slate-200/50 dark:border-slate-700/50">
+        <CardHeader className="bg-gradient-to-r from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 border-b border-slate-200/50 dark:border-slate-700/50">
+          <CardTitle className="flex items-center gap-2">
+            <Settings className="w-5 h-5" />
+            Shop Configuration
+          </CardTitle>
         </CardHeader>
-        <CardContent className="space-y-4">
-          <div>
-            <label className="text-sm font-medium">Shop Name</label>
-            <Input
-              value={settings.shopName}
-              onChange={(e) => setSettings({ ...settings, shopName: e.target.value })}
-              data-testid="input-shop-name"
-            />
-          </div>
+        <CardContent className="pt-8">
+          <div className="space-y-6">
+            {/* Shop Info Section */}
+            <div className="space-y-4">
+              <h3 className="font-semibold text-slate-900 dark:text-white text-sm uppercase tracking-wide text-slate-600 dark:text-slate-400">Business Information</h3>
+              
+              <div>
+                <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Shop Name</label>
+                <Input
+                  value={settings.shopName}
+                  onChange={(e) => setSettings({ ...settings, shopName: e.target.value })}
+                  className="mt-2"
+                  data-testid="input-shop-name"
+                />
+              </div>
 
-          <div>
-            <label className="text-sm font-medium">Address</label>
-            <Input
-              value={settings.address}
-              onChange={(e) => setSettings({ ...settings, address: e.target.value })}
-              data-testid="input-address"
-            />
-          </div>
+              <div>
+                <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Address</label>
+                <Input
+                  value={settings.address}
+                  onChange={(e) => setSettings({ ...settings, address: e.target.value })}
+                  className="mt-2"
+                  data-testid="input-address"
+                />
+              </div>
 
-          <div>
-            <label className="text-sm font-medium">City/State/Pincode</label>
-            <Input
-              value={settings.city}
-              onChange={(e) => setSettings({ ...settings, city: e.target.value })}
-              data-testid="input-city"
-            />
-          </div>
+              <div>
+                <label className="text-sm font-medium text-slate-700 dark:text-slate-300">City/State/Pincode</label>
+                <Input
+                  value={settings.city}
+                  onChange={(e) => setSettings({ ...settings, city: e.target.value })}
+                  className="mt-2"
+                  data-testid="input-city"
+                />
+              </div>
+            </div>
 
-          <div>
-            <label className="text-sm font-medium">Phone Number</label>
-            <Input
-              value={settings.phone}
-              onChange={(e) => setSettings({ ...settings, phone: e.target.value })}
-              data-testid="input-phone"
-            />
-          </div>
+            <div className="border-t border-slate-200/50 dark:border-slate-700/50 pt-6" />
 
-          <div>
-            <label className="text-sm font-medium">Email</label>
-            <Input
-              type="email"
-              value={settings.email}
-              onChange={(e) => setSettings({ ...settings, email: e.target.value })}
-              data-testid="input-email"
-            />
-          </div>
+            {/* Contact Section */}
+            <div className="space-y-4">
+              <h3 className="font-semibold text-slate-900 dark:text-white text-sm uppercase tracking-wide text-slate-600 dark:text-slate-400">Contact Details</h3>
+              
+              <div>
+                <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Phone Number</label>
+                <Input
+                  value={settings.phone}
+                  onChange={(e) => setSettings({ ...settings, phone: e.target.value })}
+                  className="mt-2"
+                  data-testid="input-phone"
+                />
+              </div>
 
-          <div>
-            <label className="text-sm font-medium">GST Number</label>
-            <Input
-              value={settings.gstNumber}
-              onChange={(e) => setSettings({ ...settings, gstNumber: e.target.value })}
-              data-testid="input-gst-number"
-            />
-          </div>
+              <div>
+                <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Email</label>
+                <Input
+                  type="email"
+                  value={settings.email}
+                  onChange={(e) => setSettings({ ...settings, email: e.target.value })}
+                  className="mt-2"
+                  data-testid="input-email"
+                />
+              </div>
+            </div>
 
-          <div>
-            <label className="text-sm font-medium">Invoice Prefix</label>
-            <Input
-              value={settings.invoicePrefix}
-              onChange={(e) => setSettings({ ...settings, invoicePrefix: e.target.value })}
-              data-testid="input-invoice-prefix"
-            />
-          </div>
+            <div className="border-t border-slate-200/50 dark:border-slate-700/50 pt-6" />
 
-          <div>
-            <label className="text-sm font-medium">Terms & Conditions</label>
-            <Textarea
-              value={settings.terms}
-              onChange={(e) => setSettings({ ...settings, terms: e.target.value })}
-              rows={4}
-              data-testid="textarea-terms"
-            />
-          </div>
+            {/* Tax & Invoice Section */}
+            <div className="space-y-4">
+              <h3 className="font-semibold text-slate-900 dark:text-white text-sm uppercase tracking-wide text-slate-600 dark:text-slate-400">Tax & Invoice</h3>
+              
+              <div>
+                <label className="text-sm font-medium text-slate-700 dark:text-slate-300">GST Number</label>
+                <Input
+                  value={settings.gstNumber}
+                  onChange={(e) => setSettings({ ...settings, gstNumber: e.target.value })}
+                  className="mt-2"
+                  data-testid="input-gst-number"
+                />
+              </div>
 
-          <Button onClick={handleSave} data-testid="button-save-settings">
-            Save Settings
-          </Button>
+              <div>
+                <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Invoice Prefix</label>
+                <Input
+                  value={settings.invoicePrefix}
+                  onChange={(e) => setSettings({ ...settings, invoicePrefix: e.target.value })}
+                  className="mt-2"
+                  data-testid="input-invoice-prefix"
+                />
+              </div>
+            </div>
+
+            <div className="border-t border-slate-200/50 dark:border-slate-700/50 pt-6" />
+
+            {/* Terms Section */}
+            <div className="space-y-4">
+              <h3 className="font-semibold text-slate-900 dark:text-white text-sm uppercase tracking-wide text-slate-600 dark:text-slate-400">Terms & Conditions</h3>
+              
+              <div>
+                <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Terms & Conditions</label>
+                <Textarea
+                  value={settings.terms}
+                  onChange={(e) => setSettings({ ...settings, terms: e.target.value })}
+                  rows={4}
+                  className="mt-2"
+                  data-testid="textarea-terms"
+                />
+              </div>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="flex gap-3 pt-6 border-t border-slate-200/50 dark:border-slate-700/50">
+              <Button 
+                onClick={handleSave}
+                className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white"
+                data-testid="button-save-settings"
+              >
+                <Save className="w-4 h-4 mr-2" />
+                Save Settings
+              </Button>
+              <Button 
+                onClick={handleReset}
+                variant="outline"
+                className="border-slate-300 dark:border-slate-600"
+              >
+                Reset to Defaults
+              </Button>
+            </div>
+          </div>
         </CardContent>
       </Card>
     </div>
