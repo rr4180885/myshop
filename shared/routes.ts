@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { insertUserSchema, users } from "./schema";
+import { insertUserSchema, insertProductSchema, insertInvoiceSchema, users, products, invoices } from "./schema";
 
 export const errorSchemas = {
   validation: z.object({
@@ -7,9 +7,6 @@ export const errorSchemas = {
     field: z.string().optional(),
   }),
   notFound: z.object({
-    message: z.string(),
-  }),
-  internal: z.object({
     message: z.string(),
   }),
   unauthorized: z.object({
@@ -46,6 +43,59 @@ export const api = {
       },
     },
   },
+  products: {
+    list: {
+      method: "GET" as const,
+      path: "/api/products",
+      responses: {
+        200: z.array(z.custom<typeof products.$inferSelect>()),
+      },
+    },
+    create: {
+      method: "POST" as const,
+      path: "/api/products",
+      input: insertProductSchema,
+      responses: {
+        201: z.custom<typeof products.$inferSelect>(),
+        400: errorSchemas.validation,
+      },
+    },
+    update: {
+      method: "PUT" as const,
+      path: "/api/products/:id",
+      input: insertProductSchema.partial(),
+      responses: {
+        200: z.custom<typeof products.$inferSelect>(),
+        404: errorSchemas.notFound,
+      },
+    },
+    delete: {
+      method: "DELETE" as const,
+      path: "/api/products/:id",
+      responses: {
+        204: z.void(),
+        404: errorSchemas.notFound,
+      },
+    },
+  },
+  invoices: {
+    list: {
+      method: "GET" as const,
+      path: "/api/invoices",
+      responses: {
+        200: z.array(z.custom<typeof invoices.$inferSelect>()),
+      },
+    },
+    create: {
+      method: "POST" as const,
+      path: "/api/invoices",
+      input: insertInvoiceSchema,
+      responses: {
+        201: z.custom<typeof invoices.$inferSelect>(),
+        400: errorSchemas.validation,
+      },
+    },
+  },
 };
 
 export function buildUrl(path: string, params?: Record<string, string | number>): string {
@@ -62,3 +112,5 @@ export function buildUrl(path: string, params?: Record<string, string | number>)
 
 export type LoginInput = z.infer<typeof api.auth.login.input>;
 export type User = typeof users.$inferSelect;
+export type Product = typeof products.$inferSelect;
+export type Invoice = typeof invoices.$inferSelect;

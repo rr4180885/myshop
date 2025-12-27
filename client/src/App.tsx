@@ -6,13 +6,13 @@ import { ProtectedRoute } from "@/components/ProtectedRoute";
 
 import NotFound from "@/pages/not-found";
 import AuthPage from "@/pages/auth-page";
-import HomePage from "@/pages/home-page";
+import ShopPage from "@/pages/shop-page";
 
 function Router() {
   return (
     <Switch>
       <Route path="/auth" component={AuthPage} />
-      <ProtectedRoute path="/" component={HomePage} />
+      <ProtectedRoute path="/" component={ShopPage} />
       <Route component={NotFound} />
     </Switch>
   );
